@@ -14,7 +14,7 @@ export const ThemeContext = createContext<ThemeContextValue>(
     );
 
 export function ThemeContextProvider({ children }: {children: React.ReactElement}){
-    const [theme, setTheme] = useState('Sherbet');
+    const [theme, setTheme] = useState('sherbet');
     
     return(
         <ThemeContext.Provider value={{theme, setTheme}}>
