@@ -3,6 +3,7 @@ import { themeContext } from './context';
 import { Link, Routes, Route } from "react-router-dom";
 
 import './App.css'
+import './themes.css'
 
 const ThemeSelection = () =>{
   return(
@@ -40,6 +41,7 @@ const TerminalString: React.FC<terminalStringProps> = ({ randNum, text, linkTarg
   const defaultUsername: string = "username";
   const [currentTime, setCurrentTime] = useState<string>(defaultUsername);
   const [username, setUsername] = useState<string>(defaultUsername);
+  const [previousTheme, setPreviousTheme] = useState('')
   const {theme, setTheme} = useContext(themeContext);
 
   useEffect(()=>{
@@ -59,14 +61,20 @@ const TerminalString: React.FC<terminalStringProps> = ({ randNum, text, linkTarg
     event.preventDefault();
   }
 
+  useEffect(()=>{
+    document.body.classList.remove(previousTheme);
+    document.body.classList.add(theme);
+    setPreviousTheme(theme);
+
+  }, [theme])
+
   
   return (
 
-    <main>
+    <main className={`${theme}`}>
          <form onSubmit={handleSubmit}>
-      <h1> 
-        <input type= "text"  defaultValue={defaultUsername}  onChange={handleUsernameChange}
-/>
+      <h1 className={`${theme}`}> 
+        <input type= "text"  defaultValue='Enter username...'  onChange={handleUsernameChange}/>
       </h1>
       </form>
   <li>
@@ -74,6 +82,7 @@ const TerminalString: React.FC<terminalStringProps> = ({ randNum, text, linkTarg
       -&gt; % user{randNum}@{username === '' ? defaultUsername : username}'s PC [{currentTime}] [/roslyn_donahue_portfolio]
     </div>
     <Link to={linkTarget} className={`${theme}`}>
+      test
   
     </Link>
   </li>
