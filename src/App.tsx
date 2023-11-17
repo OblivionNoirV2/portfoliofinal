@@ -5,6 +5,14 @@ import { Link, Routes, Route } from "react-router-dom";
 import './App.css'
 import './themes.css'
 
+const themeNames: string[] = [
+  'Sherbet', //default
+  'Winter Lights', //very light
+  'Void', //very dark
+  'Singularity', //Neon, greys
+  'Mint' //pastel greens 
+];
+
 const ThemeSelection = () =>{
   return(
     <select>
@@ -41,7 +49,7 @@ const TerminalString: React.FC<terminalStringProps> = ({ randNum, text, linkTarg
   const defaultUsername: string = "username";
   const [currentTime, setCurrentTime] = useState<string>(defaultUsername);
   const [username, setUsername] = useState<string>(defaultUsername);
-  const [previousTheme, setPreviousTheme] = useState('')
+  const [previousTheme, setPreviousTheme] = useState('sherbet')
   const {theme, setTheme} = useContext(themeContext);
 
   useEffect(()=>{
@@ -62,11 +70,13 @@ const TerminalString: React.FC<terminalStringProps> = ({ randNum, text, linkTarg
   }
 
   useEffect(()=>{
-    document.body.classList.remove(previousTheme);
-    document.body.classList.add(theme);
-    setPreviousTheme(theme);
+    document.body.classList.remove(previousTheme); //remove prev
+    console.log(`theme removed:  ${previousTheme}`);
+    document.body.classList.add(theme); //set new
+    setPreviousTheme(theme); //prev for the next cycle is now the current one
+    console.log(`theme set to: ${theme}`);
 
-  }, [theme])
+  }, [theme]);
 
   
   return (
@@ -100,7 +110,9 @@ const App = () =>  {
 
   return (
     <main>
-          <ThemeSelection/>
+      <div>
+      <ThemeSelection/>
+      </div>
           <TerminalString randNum={generatedNumber} text='about' linkTarget='/about'/>
 
     </main>
