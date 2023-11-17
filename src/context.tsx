@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
 
-interface ThemeContextValue {
+interface themeContextValue {
     theme: string; 
     setTheme: (value: string) => void; 
 };
 
-export const ThemeContext = createContext<ThemeContextValue>(
+export const themeContext = createContext<themeContextValue>(
     {
         theme: 'sherbet', //default
         setTheme: () => {}
@@ -13,13 +13,13 @@ export const ThemeContext = createContext<ThemeContextValue>(
     }
     );
 
-export function ThemeContextProvider({ children }: {children: React.ReactElement}){
+export function themeContextProvider({ children }: {children: React.ReactElement}){
     const [theme, setTheme] = useState('sherbet');
     
     return(
-        <ThemeContext.Provider value={{theme, setTheme}}>
+        <themeContext.Provider value={{theme, setTheme}}>
             {children}
-        </ThemeContext.Provider>
+        </themeContext.Provider>
     )
 
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { ThemeContext } from './context';
+import { themeContext } from './context';
 import { Link, Routes, Route } from "react-router-dom";
 
 import './App.css'
@@ -12,7 +12,7 @@ const ThemeSelection = () =>{
   );
 };
 
-function GetCurrentTime(){
+function getCurrentTime(){
   const date = new Date();
   const hours = date.getHours();
   const minutes = date.getMinutes();
@@ -24,44 +24,79 @@ function GetCurrentTime(){
 
 
 //for the terminal gimmick 
-function GetRandomNumber(min: number, max: number) {
+function getRandomNumber(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min); 
 };
 
-interface TerminalStringProps {
+interface terminalStringProps {
   randNum: number; 
   text: string; 
   linkTarget: string;
 };
 
-const TerminalString: React.FC<TerminalStringProps> = ({ randNum, text, linkTarget}) =>{
-  const [currentTime, setCurrentTime] = useState<string>('');
-  const {theme, setTheme} = useContext(ThemeContext);
+
+const TerminalString: React.FC<terminalStringProps> = ({ randNum, text, linkTarget}) =>{
+
+  const defaultUsername: string = "username";
+  const [currentTime, setCurrentTime] = useState<string>(defaultUsername);
+  const [username, setUsername] = useState<string>(defaultUsername);
+  const {theme, setTheme} = useContext(themeContext);
 
   useEffect(()=>{
     const timerInterval = setInterval(() => {
-      setCurrentTime(GetCurrentTime());
+      setCurrentTime(getCurrentTime());
 
     }, 1000)
     return () => clearInterval(timerInterval);
   })
 
+  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>){
+
+    setUsername(event.target.value);
+  };
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>){
+    event.preventDefault();
+  }
+
+  
   return (
-    <li>
-      <Link to={linkTarget} className={`${theme}`}>
 
-      </Link>
+    <main>
+         <form onSubmit={handleSubmit}>
+      <h1> 
+        <input type= "text"  defaultValue={defaultUsername}  onChange={handleUsernameChange}
+/>
+      </h1>
+      </form>
+  <li>
+    <div className='flex' >
+      -&gt; % user{randNum}@{username === '' ? defaultUsername : username}'s PC [{currentTime}] [/roslyn_donahue_portfolio]
+    </div>
+    <Link to={linkTarget} className={`${theme}`}>
+  
+    </Link>
+  </li>
+  </main>
+)
 
-    </li>
-  )
-}
+};
 
 const App = () =>  {
+  const [generatedNumber, setGeneratedNumber] = useState<number>(10);
+
+  useEffect(()=>{
+    setGeneratedNumber(getRandomNumber(10, 99)); 
+  }, [])
 
   return (
-    <>
-    <ThemeSelection/>
-    </>
+    <main>
+          <ThemeSelection/>
+          <TerminalString randNum={generatedNumber} text='about' linkTarget='/about'/>
+
+    </main>
+
+    
   );
 };
 
